@@ -1,4 +1,5 @@
 ﻿import * as express from "express";
+import * as fallback from 'express-history-api-fallback'
 import {ISharedRouter} from "./router";
 import * as cors from 'cors';
 import {errorsMiddleware} from "./middlewares/errors";
@@ -11,6 +12,7 @@ export class App {
 
         this.initializeMiddlewares();
         this.initializeRouters(router);
+        this.initSpaFallback();
         this.initializeErrorHandler();
     }
 
@@ -26,6 +28,10 @@ export class App {
     
     private initializeErrorHandler() {
         this.app.use(errorsMiddleware.build());
+    }
+    
+    private initSpaFallback() {
+        this.app.use(fallback('index.html', { root: 'wwwroot' }))
     }
 
     public listen() {
